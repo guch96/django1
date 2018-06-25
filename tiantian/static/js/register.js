@@ -42,14 +42,27 @@ $(function(){
 		var len = $('#user_name').val().length;
 		if(len<5||len>20)
 		{
-			$('#user_name').next().html('请输入5-20个字符的用户名')
+			$('#user_name').next().html('请输入5-20个字符的用户名');
 			$('#user_name').next().show();
 			error_name = true;
 		}
 		else
 		{
-			$('#user_name').next().hide();
-			error_name = false;
+
+			$.get('/user/zhuce_yanzheng/?uname='+$('#user_name').val(),function (data) {
+				if(data.count==1){
+					$('#user_name').next().html('用户名已存在').show();
+
+					error_name = true;
+				}
+				else{
+					 $('#user_name').next().hide();
+					 error_name = false;
+				}
+
+            });
+
+
 		}
 	}
 
@@ -104,24 +117,17 @@ $(function(){
 
 	}
 
+    $('#sumbit_button').click(function () {
+			if(error_name == false && error_password == false && error_check_password == false && error_email == false && error_check == false){
+				$('form').submit();
+			}
+			else{
+				return false
+			}
 
-	$('#reg_form').submit(function() {
-		check_user_name();
-		check_pwd();
-		check_cpwd();
-		check_email();
 
-		if(error_name == false && error_password == false && error_check_password == false && error_email == false && error_check == false)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
 
-	});
-
+    })
 
 
 
