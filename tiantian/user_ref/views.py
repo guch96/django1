@@ -62,7 +62,7 @@ def login_yanzheng(request):
             else:
                 red.set_cookie("uname","",max_age=-1)
             request.session['user_id']=user[0].id
-            request.session['uname']=uname
+            request.session['user_name']=uname
             return red
         else:
             context={"title":"登录","error_name":0,"error_pwd":1,"uname":uname,"upwd":upwd}
@@ -72,10 +72,21 @@ def login_yanzheng(request):
         return render(request, "user_ref/login.html", context)
 
 def info(requset):
-    uname=requset.session["uname"]
-    uadress=requset.session
-    context={}
-    return render(requset,'user_ref/user_center_info.html')
+    user_email = UserInfo.objects.get(id=requset.session['user_id']).uemail
+
+    # # 最近浏览
+    # goods_ids = requset.COOKIES.get('goods_ids', '')
+    # goods_id_list = goods_ids.split(',')
+    # goods_list = []
+    # for goods_id in goods_id_list:
+    #     goods_list.append(GoodsInfo.objects.get(id=int(goods_id)))
+
+    context = {'title': '用户中心',
+               'user_email': user_email,
+               'user_name':requset.session['user_name'],
+               'page_name': 1, 'info': 1,}
+
+    return render(requset, 'user_ref/user_center_info.html', context)
 def site(request):
     user = UserInfo.objects.get(id=request.session['user_id'])
     if request.method == 'POST':
