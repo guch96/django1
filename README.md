@@ -1,2 +1,2 @@
-# django1
-django demo
+# 基于django的天天生鲜商城项目
+天天生鲜
