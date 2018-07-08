@@ -17,13 +17,10 @@ from django.conf.urls import url,include
 from django.contrib import admin
 import views
 urlpatterns = [
-url(r'^register/$',views.register,name='register'),
-url(r'^register_saveInfo/$',views.register_saveInfo,name='saveInfo'),
-url(r'^login/$',views.login,name='login'),
-url(r'^zhuce_yanzheng/$',views.zhuce_yanzheng,name='Zhuceyanzheng'),
-url(r'^login_yanzheng/$',views.login_yanzheng,name='Loginyanzheng'),
-url(r'^info/$',views.info,name='info'),
-url(r'^order/', views.order,name='order'),
-url(r'^site/$', views.site,name='site'),
-url(r'^logout/$', views.logout,name='out'),
+ url(r'^$',views.cart),
+ url(r'^add(\d+)_(\d+)/$',views.add),
+ url(r'^count/$',views.count),
+ url(r'^delete(\d+)/$', views.delete),
+ url(r'^edit(\d+)_(\d+)/$', views.edit),
+
 ]

@@ -22,4 +22,5 @@ url(r'^tinymce/', include('tinymce.urls')),
 url(r'^user/', include('user_ref.urls',namespace='user')),
 url(r'^goods/', include('goods_ref.urls')),
  url(r'^', include('goods_ref.urls', namespace='goods')),
+url(r'^cart/',include('cart_ref.urls',namespace='cart'))
 ]

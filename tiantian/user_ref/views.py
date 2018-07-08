@@ -5,7 +5,8 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse,HttpResponseRedirect
 from models import UserInfo
 from hashlib import sha1
-
+from .islogin import *
+from goods_ref.models import GoodsInfo
 # Create your views here.
 def register(request):
     content={'title':'注册'}
@@ -70,23 +71,31 @@ def login_yanzheng(request):
     else:
         context={"title":"登录","error_name":1,"error_pwd":0,"uname":uname,"upwd":upwd}
         return render(request, "user_ref/login.html", context)
-
+@islogin
 def info(requset):
     user_email = UserInfo.objects.get(id=requset.session['user_id']).uemail
 
-    # # 最近浏览
-    # goods_ids = requset.COOKIES.get('goods_ids', '')
-    # goods_id_list = goods_ids.split(',')
-    # goods_list = []
-    # for goods_id in goods_id_list:
-    #     goods_list.append(GoodsInfo.objects.get(id=int(goods_id)))
-
+    # 最近浏览
+    goods_ids = requset.COOKIES.get('goods_ids', '')
+    goods_id_list = goods_ids.split(',')
+    goods_list = []
+    if goods_ids=='':
+        goods_list=[]
+    else:
+      for goods_id in goods_id_list:
+        goods_list.append(GoodsInfo.objects.get(id=int(goods_id)))
     context = {'title': '用户中心',
                'user_email': user_email,
                'user_name':requset.session['user_name'],
-               'page_name': 1, 'info': 1,}
+               'page_name': 1, 'info': 1,
+               'goods_list':goods_list,
+               'len':len(goods_list)
+               }
+    res=render(requset, 'user_ref/user_center_info.html', context)
 
-    return render(requset, 'user_ref/user_center_info.html', context)
+
+    return res
+@islogin
 def site(request):
     user = UserInfo.objects.get(id=request.session['user_id'])
     if request.method == 'POST':
@@ -98,6 +107,10 @@ def site(request):
         user.save()
     context = {'title': '用户中心', 'user': user,'page_name':1,'site':1}
     return render(request, 'user_ref/user_center_site.html', context)
+@islogin
 def order(request):
     context = {'title': '用户中心', 'page_name': 1, 'order': 1}
     return render(request, 'user_ref/user_center_order.html', context)
+def logout(request):
+    request.session.flush()
+    return redirect('/')

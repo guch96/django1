@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for tiantian project.
 
@@ -39,7 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_ref',
     'goods_ref',
-    'tinymce'
+    'tinymce',
+    'cart_ref',
+    'haystack',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +135,14 @@ TINYMCE_DEFAULT_CONFIG = {
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR),'static']
 MEDIA_ROOT=os.path.join(BASE_DIR,"static/goods_ref")
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_cn_backend.WhooshEngine',
+        'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
+    }
+}
+
+#自动生成索引
+HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+HAYSTACK_SIGNAL_RESULTs_PER_PAGE = 18
